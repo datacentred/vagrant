@@ -13,3 +13,4 @@ class { [
 
 contain dc_profile::mon::icinga_client
 contain dc_profile::util::external_facts
+
