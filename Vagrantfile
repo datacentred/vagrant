@@ -4,15 +4,18 @@
 VAGRANTFILE_API_VERSION = "2"
 
 nodes = {
-    'puppet'    => [05],
-    'graphite'  => [10],
-    'db0'       => [11],
-    'gdash'     => [12],
-    'packer'    => [13],
-    'logstash'  => [14],
-    'logclient' => [15],
-    'packer'    => [16],
-    'client'    => ['dhcp'],
+    'puppet'      => [05],
+    'graphite'    => [10],
+    'db0'         => [11],
+    'gdash'       => [12],
+    'packer'      => [13],
+    'logstash'    => [14],
+    'logclient'   => [15],
+    'packer'      => [16],
+    'controller0' => [20],
+    'controller1' => [19],
+    'client'      => ['dhcp'],
+    'compute0'    => [25],
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -33,9 +36,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
               when "puppet"
                 v.vmx["memsize"] = 1024
               when "db0"
-                v.vmx["memsize"] = 256
+                v.vmx["memsize"] = 1024
               when "client"
                 v.vmx["memsize"] = 256
+              when "controller0"
+                v.vmx["memsize"] = 1024
+              when "controller1"
+                v.vmx["memsize"] = 1024
             end
           end
           # Oracle VirtualBox provider
@@ -69,6 +76,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             puppet.hiera_config_path = "provision/puppet/hiera.yaml"
             puppet.facter = {
               "environment" => "production",
+              "domain" => "nick.datacentred.co.uk",
+              "is_vagrant" => "true",
             }
             puppet.options = "--verbose --debug --fileserverconfig=/vagrant/provision/puppet/fileserver.conf"
           end
